@@ -9,7 +9,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-var amount float32 = 0
+var amount float32 = 1000
 
 type DepositServer struct {
 	pb.UnimplementedDepositServiceServer
@@ -28,6 +28,10 @@ func (*DepositServer) Deposit(ctx context.Context, req *pb.Req) (*pb.Res, error)
 
 func (*DepositServer) Withdraw(ctx context.Context, req *pb.Req) (*pb.Res, error) {
 	if amount < 1 {
+		return nil, status.Errorf(codes.InvalidArgument, "cannot withdraw %v", req.GetAmount())
+	}
+
+	if amount > req.GetAmount() {
 		return nil, status.Errorf(codes.InvalidArgument, "cannot withdraw %v", req.GetAmount())
 	}
 
