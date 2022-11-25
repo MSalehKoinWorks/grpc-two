@@ -27,7 +27,7 @@ func (*DepositServer) Deposit(ctx context.Context, req *pb.Req) (*pb.Res, error)
 }
 
 func (*DepositServer) Withdraw(ctx context.Context, req *pb.Req) (*pb.Res, error) {
-	if amount < 1 {
+	if req.GetAmount() < 1 {
 		return nil, status.Errorf(codes.InvalidArgument, "cannot withdraw %v", req.GetAmount())
 	}
 
