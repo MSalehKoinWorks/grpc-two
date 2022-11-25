@@ -15,13 +15,24 @@ type DepositServer struct {
 	pb.UnimplementedDepositServiceServer
 }
 
-func (*DepositServer) Deposit(ctx context.Context, req *pb.DepositRequest) (*pb.DepositResponse, error) {
+func (*DepositServer) Deposit(ctx context.Context, req *pb.Req) (*pb.Res, error) {
 	if req.GetAmount() < 0 {
 		return nil, status.Errorf(codes.InvalidArgument, "cannot deposit %v", req.GetAmount())
 	}
 
 	amount += req.GetAmount()
-	fmt.Printf("new deposit: %v, balance: %v\n", req.GetAmount(), amount)
+	fmt.Printf("deposit: %v, new balance: %v\n", req.GetAmount(), amount)
 
-	return &pb.DepositResponse{Ok: true}, nil
+	return &pb.Res{Ok: true}, nil
+}
+
+func (*DepositServer) Withdraw(ctx context.Context, req *pb.Req) (*pb.Res, error) {
+	if amount < 1 {
+		return nil, status.Errorf(codes.InvalidArgument, "cannot withdraw %v", req.GetAmount())
+	}
+
+	amount -= req.GetAmount()
+	fmt.Printf("withdraw: %v, new balance: %v\n", req.GetAmount(), amount)
+
+	return &pb.Res{Ok: true}, nil
 }
