@@ -103,14 +103,14 @@ func TestDepositServer_Withdraw(t *testing.T) {
 	}{
 		{
 			"invalid request with negative amount",
-			-100000.00,
+			-500.00,
 			nil,
 			codes.InvalidArgument,
-			fmt.Sprintf("cannot withdraw %v", -100000.00),
+			fmt.Sprintf("cannot withdraw %v", -500.00),
 		},
 		{
 			"valid request with non negative amount",
-			1000.00,
+			500.00,
 			&pb.Res{Ok: true},
 			codes.OK,
 			"",
